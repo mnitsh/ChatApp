@@ -23,12 +23,15 @@ app.use(
   })
 );
 
-
 app.use(express.static("public"));
 
 app.use(cookieParse());
 
 //authentication
-import authRoutes from "./routes/auth.route.js"
-app.use("/api/auth",authRoutes)
+import authRoutes from "./routes/auth.route.js";
+app.use("/api/auth", authRoutes);
+
+//message routs
+import messageRouts from "./routes/message.route.js"
+app.use("/api/message", messageRouts);
 export { app };

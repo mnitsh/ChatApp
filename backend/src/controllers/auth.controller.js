@@ -47,8 +47,6 @@ const signup = asyncHandler(async (req, res) => {
 
     const profilePic = await uplodeOnCloudinary(dpLocalPath);
 
-    console.log(profilePic);
-
     //creating new user
 
     const newUser = await User.create({
