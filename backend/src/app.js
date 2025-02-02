@@ -3,10 +3,11 @@ import cors from "cors";
 import cookieParse from "cookie-parser";
 
 const app = express();
+
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
-    Credential: true,
+    credentials: true,
   })
 );
 
@@ -27,11 +28,16 @@ app.use(express.static("public"));
 
 app.use(cookieParse());
 
+
 //authentication
 import authRoutes from "./routes/auth.route.js";
 app.use("/api/auth", authRoutes);
 
 //message routs
-import messageRouts from "./routes/message.route.js"
+import messageRouts from "./routes/message.route.js";
 app.use("/api/message", messageRouts);
+
+//globally error handeling
+import { globalErrorHandler } from "./controllers/error.controller.js";
+app.use(globalErrorHandler)
 export { app };
