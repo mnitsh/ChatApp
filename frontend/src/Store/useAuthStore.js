@@ -64,4 +64,22 @@ export const useAuthStore = create((set) => ({
       set({ islogingIn: false });
     }
   },
+
+  updatingProfile: async (data) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const res = await axiosInstance.patch("/auth/updateDP", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      set({ authUser: res.data });
+      toast.success("Profile picture updated successfullly");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again";
+      toast.error(errorMessage);
+    } finally {
+      set({ isUpdatingProfile: false });
+    }
+  },
 }));
