@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
-import { Flag, LogOut } from "lucide-react";
 
 export const useAuthStore = create((set) => ({
   authUser: null,
@@ -9,6 +8,7 @@ export const useAuthStore = create((set) => ({
   islogingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
+  onlineUser:[],
 
   CheckAuth: async () => {
     set({ isCheckingAuth: true }); // Start loading state

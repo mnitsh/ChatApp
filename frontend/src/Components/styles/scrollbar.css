@@ -1,0 +1,19 @@
+/* Hide Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in Chrome, Safari, Edge */
+}
+
+.no-scrollbar {
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column-reverse; /* Puts scrollbar at the bottom */
+  overflow-y: auto;
+  height: 100%; /* Make sure it takes full height */
+}
+
+.chat-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}

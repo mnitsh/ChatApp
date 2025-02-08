@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middlewares.js";
+import {upload} from "../middlewares/multer.middleware.js"
 import {
   getMessages,
   getUserForSidebar,
@@ -12,5 +13,5 @@ router.get("/users", verifyJWT, getUserForSidebar);
 
 router.get("/:id", verifyJWT, getMessages);
 
-router.post("/send/:id", verifyJWT, sendMessages);
+router.post("/send/:id", verifyJWT, upload.single("image"),sendMessages);
 export default router;

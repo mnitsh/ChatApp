@@ -19,8 +19,6 @@ function App() {
     CheckAuth();
   }, [CheckAuth]);
 
-  console.log({ authUser });
-
   if (isCheckingAuth && !authUser)
     return (
       <div className="flex justify-center h-screen items-center">
@@ -28,7 +26,7 @@ function App() {
       </div>
     );
   return (
-    <div data-theme={theme}>
+    <div data-theme={theme} className="overflow-y-scroll">
       <Navbar />
       <Routes>
         <Route

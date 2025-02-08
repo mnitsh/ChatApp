@@ -5,7 +5,6 @@ import { generateToken } from "../utils/Token.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uplodeOnCloudinary } from "../utils/cloudinary.js";
-import { error } from "console";
 
 //creating new user if not existed
 const signup = asyncHandler(async (req, res) => {
@@ -28,11 +27,7 @@ const signup = asyncHandler(async (req, res) => {
 
   //geting url of dp using multer
   const dpLocalPath = req.file?.path;
-
-/*   if (!dpLocalPath) {
-    throw new ApiError(400, "Profile picture is required"); // Fix: Ensure profile picture is uploaded
-  } */
-
+  
   //check whether a user already exists
   const existedUser = await User.findOne({ $or: [{ email }, { username }] });
 

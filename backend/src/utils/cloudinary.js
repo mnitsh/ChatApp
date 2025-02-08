@@ -16,11 +16,20 @@ cloudinary.config({
 
 const uplodeOnCloudinary = async (localFilePath) => {
   try {
-    if (!localFilePath) return null;
+    if (!localFilePath || typeof localFilePath !== "string") return null;    
+
+    // Check if the path is valid
+    if (!fs.existsSync(localFilePath)) {
+      console.error("Error: File does not exist");
+      return null;
+    }    
+
+    
     //upload the file on cloudinary
     const response = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
     });
+    
     //file has been uploaded successfull
     fs.unlinkSync(localFilePath);
     return response;
@@ -31,3 +40,5 @@ const uplodeOnCloudinary = async (localFilePath) => {
 };
 
 export { uplodeOnCloudinary };
+
+
