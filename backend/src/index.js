@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
-import { app } from "./app.js";
+import { app, server, io, userSocketMap } from "./app.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -13,10 +13,25 @@ connectDB(mongoose_uri)
       console.log("ERR: ", error);
       throw error;
     });
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server started at PORT:${PORT}`);
+    });
+
+    io.on("connection", (socket) => {
+      console.log("A user connected...", socket.id);
+      const userId = socket.handshake.query.userId;
+      if (userId) {
+        userSocketMap[userId] = socket.id;
+      }
+
+      io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+      socket.on("disconnect", () => {
+        console.log("A user disconnected", socket.id);
+        delete userSocketMap[userId];
+      });
     });
   })
   .catch((error) => {
-    console.log("MONGO db connection failed");
+    console.log("MONGO db connection failed", error.message);
   });

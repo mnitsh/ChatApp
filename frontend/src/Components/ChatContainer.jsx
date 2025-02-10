@@ -8,22 +8,35 @@ import { formatMessageTime } from "../lib/utils";
 import "./styles/scrollbar.css";
 
 function ChatContainer() {
-  const { messages, isMessagesLoding, selectedUser, getMessage } =
-    useChatStore();
+  const {
+    messages,
+    isMessagesLoding,
+    selectedUser,
+    getMessage,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
 
   const chatEndRef = useRef(null);
 
   useEffect(() => {
     getMessage(selectedUser._id);
-  }, [getMessage, selectedUser._id]);
+    subscribeToMessages();
 
+    return () => unsubscribeFromMessages();
+  }, [
+    getMessage,
+    selectedUser._id,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  ]);
 
   useEffect(() => {
     if (messages.length > 0) {
       chatEndRef.current?.scrollIntoView({ block: "end" });
     }
-  }, [messages]); 
+  }, [messages]);
 
   if (isMessagesLoding)
     return (
@@ -36,9 +49,7 @@ function ChatContainer() {
   return (
     <div className="flex-1 flex flex-col overflow-auto ">
       <ChatHeader />
-      <div
-        className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar"
-      >
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
         {messages.map((message) => (
           <div
             key={message._id}
@@ -76,7 +87,7 @@ function ChatContainer() {
           </div>
         ))}
         <div ref={chatEndRef} />
-      </div >
+      </div>
       <MessageInput />
     </div>
   );

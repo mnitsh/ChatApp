@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useChatStore } from "../Store/useChatStore";
 import { Send, Image, X } from "lucide-react";
 import toast from "react-hot-toast";
@@ -8,6 +8,7 @@ function MessageInput() {
   const [text, setText] = useState("");
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [compressedFile, setCompressedFile] = useState(null);
   const fileInputRef = useRef(null);
   const { sendMessage } = useChatStore();
 
@@ -26,6 +27,27 @@ function MessageInput() {
     reader.readAsDataURL(file);
   };
 
+  useEffect(() => {
+    const compressImage = async () => {
+      if (!file) return;
+
+      const options = {
+        maxSizeMB: 1, // Target max size (1MB)
+        maxWidthOrHeight: 1024, // Resize image to a max width/height of 1024px
+        useWebWorker: true, // Use a web worker for processing
+      };
+
+      try {
+        const compressed = await imageCompression(file, options);
+        setCompressedFile(compressed);
+      } catch (error) {
+        console.error("Image compression failed:", error);
+      }
+    };
+
+    compressImage();
+  }, [file]);
+
   const removeImage = () => {
     setImagePreview(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -35,24 +57,16 @@ function MessageInput() {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
 
-    const options = {
-      maxSizeMB: 1, // Target max size (1MB)
-      maxWidthOrHeight: 1024, // Resize image to a max width/height of 1024px
-      useWebWorker: true, // Use a web worker for processing
-    };
-
     try {
-      let compressedFile = "";
-      if (file) compressedFile = await imageCompression(file, options);
-
       const formData = new FormData();
       formData.append("text", text.trim()); // Add text message
-      formData.append("image", compressedFile); // Add image file
+      if (compressedFile) formData.append("image", compressedFile); // Add image file
 
       await sendMessage(formData);
       //clear form
       setText("");
       setImagePreview(null);
+      setCompressedFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Failed to send message: ", error);
