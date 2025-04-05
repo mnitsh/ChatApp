@@ -44,7 +44,6 @@ function Sidebar() {
             ({onlineUser.length - 1})
           </span>
         </div>
-
       </div>
       <div className="overflow-y-auto w-full py-3 no-scrollbar">
         {filteredUser.map((user) => (
@@ -76,9 +75,9 @@ function Sidebar() {
             </div>
           </button>
         ))}
-        {
-          filteredUser.length === 0 && (<div className="text-center py-4 text-zinc-500">No online users</div>)
-        }
+        {filteredUser.length === 0 && (
+          <div className="text-center py-4 text-zinc-500">No online users</div>
+        )}
       </div>
     </aside>
   );

@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParse from "cookie-parser";
 
+import path from "path";
+
 import { Server } from "socket.io";
 import { createServer } from "http";
 
@@ -15,6 +17,9 @@ const io = new Server(server, {
     origin: [process.env.CORS_ORIGIN],
   },
 });
+
+
+const __dirname = path.resolve();
 
 //used to store online users
 //{userId:socket.id}
@@ -56,7 +61,11 @@ app.use("/api/auth", authRoutes);
 import messageRouts from "./routes/message.route.js";
 app.use("/api/message", messageRouts);
 
-//globally error handeling
-import { globalErrorHandler } from "./controllers/error.controller.js";
+if (process.env.NODE_ENV === "production"){
+  app.use(express.static(path.join(__dirname,"../frontend/dist")))
+}
+
+  //globally error handeling
+  import { globalErrorHandler } from "./controllers/error.controller.js";
 app.use(globalErrorHandler);
 export { app, server, io, userSocketMap, getReceiverSocketId };

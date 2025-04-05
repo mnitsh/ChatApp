@@ -4,13 +4,15 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
   },
-  "author": "",
+  "author": "Shashank patel",
   "license": "ISC",
-  "description": "",
+  "description": "An interactive chat app to communicate with your loved once",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chat_app": "file:..",
     "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
